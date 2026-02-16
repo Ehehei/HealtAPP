@@ -118,7 +118,6 @@ kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versio
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 koin = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-plugin" }
-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 androidx-room = { id = "androidx.room", version.ref = "room" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 android-test = { id = "com.android.test", version.ref = "agp" }
