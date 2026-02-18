@@ -48,6 +48,8 @@ koin-plugin = "0.3.0"
 
 # Media
 coil = "2.7.0"
+camerax = "1.4.2"
+tink = "1.20.0"
 
 # Testing & benchmarking
 junit = "4.13.2"
@@ -107,6 +109,12 @@ play-services-fitness = { module = "com.google.android.gms:play-services-fitness
 # Media
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+androidx-camera-bom = { module = "androidx.camera:camera-bom", version.ref = "camerax" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle" }
+androidx-camera-video = { module = "androidx.camera:camera-video" }
+androidx-camera-view = { module = "androidx.camera:camera-view" }
+tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tink" }
 
 # Quality
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
