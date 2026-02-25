@@ -13,14 +13,14 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class GetDashboardSummaryUseCase(
-    private val profileRepository: UserProfileRepository,
+    private val userProfileRepository: UserProfileRepository,
     private val stepRepository: StepRepository,
     private val weightRepository: WeightRepository,
     private val healthRepository: StateOfHealthRepository,
     private val bloodPressureRepository: BloodPressureRepository
 ) {
     suspend operator fun invoke(userId: String): DashboardSummary? {
-        val profile = profileRepository.getById(userId) ?: return null
+        val profile = userProfileRepository.getById(userId) ?: return null
         val today = LocalDate.now()
 
         val todaySteps = stepRepository.getByDateRange(userId, today, today)
