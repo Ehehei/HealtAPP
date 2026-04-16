@@ -14,7 +14,7 @@ android {
     }
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -46,8 +46,15 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
 
+    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    implementation(libs.androidx.health.connect)
+
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+
     implementation(libs.retrofit)
     implementation(libs.kotlinx.serialization)
 
@@ -55,6 +62,8 @@ dependencies {
     implementation(libs.retrofit.adapters.result)
     implementation(libs.okhttp)
     api(libs.kotlinx.immutable)
+
+    implementation(libs.tink.android)
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
