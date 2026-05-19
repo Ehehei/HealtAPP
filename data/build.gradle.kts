@@ -55,18 +55,13 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.android)
 
-    implementation(libs.retrofit)
     implementation(libs.kotlinx.serialization)
 
-    implementation(libs.retrofit.converter.kotlinx.serialization)
-    implementation(libs.retrofit.adapters.result)
-    implementation(libs.okhttp)
     api(libs.kotlinx.immutable)
 
     implementation(libs.tink.android)
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
-    debugImplementation(libs.okhttp.logging.interceptor)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
