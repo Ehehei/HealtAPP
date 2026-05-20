@@ -3,20 +3,37 @@ package com.example.domain.usecase.report
 import com.example.domain.model.BloodPressureStats
 import com.example.domain.model.BpClassification
 import com.example.domain.model.HealthReportData
+import com.example.domain.model.screening.ScreeningStatus
 import com.example.domain.repository.BloodPressureRepository
+import com.example.domain.repository.MedicationIntakeRepository
+import com.example.domain.repository.MedicationRepository
+import com.example.domain.repository.ReminderRepository
+import com.example.domain.repository.ScreeningCatalog
+import com.example.domain.repository.ScreeningRecordRepository
 import com.example.domain.repository.StateOfHealthRepository
 import com.example.domain.repository.StepRepository
 import com.example.domain.repository.UserProfileRepository
 import com.example.domain.repository.WeightRepository
+import com.example.domain.usecase.profile.CalculateUserAgeUseCase
+import com.example.domain.usecase.screening.GetEligibleScreeningsUseCase
+import kotlinx.coroutines.flow.first
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 
 class GenerateHealthReportDataUseCase(
     private val profileRepository: UserProfileRepository,
     private val bloodPressureRepository: BloodPressureRepository,
     private val weightRepository: WeightRepository,
     private val stepRepository: StepRepository,
-    private val healthRepository: StateOfHealthRepository
+    private val healthRepository: StateOfHealthRepository,
+    private val medicationRepository: MedicationRepository,
+    private val medicationIntakeRepository: MedicationIntakeRepository,
+    private val reminderRepository: ReminderRepository,
+    private val screeningCatalog: ScreeningCatalog,
+    private val screeningRecordRepository: ScreeningRecordRepository,
+    private val calculateAge: CalculateUserAgeUseCase,
+    private val eligibleScreenings: GetEligibleScreeningsUseCase,
 ) {
     suspend operator fun invoke(
         userId: String,
@@ -68,6 +85,23 @@ class GenerateHealthReportDataUseCase(
             latestWeight.weightKg / (heightM * heightM)
         } else null
 
+        val medications = medicationRepository.getByUserId(userId)
+        val medsById = medications.associateBy { it.id }
+
+        val fromInstant = from.atStartOfDay(ZoneId.systemDefault()).toInstant()
+        val toInstant = to.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant()
+        val intakes = medicationIntakeRepository.observeByUserId(userId, limit = 1000).first()
+            .filter { it.takenAt in fromInstant..toInstant }
+            .sortedByDescending { it.takenAt }
+
+        val activeReminders = reminderRepository.getEnabledForUser(userId)
+
+        val age = calculateAge(profile.birthDate)
+        val screeningRecords = screeningRecordRepository.getByUserId(userId)
+        val eligibility = eligibleScreenings
+            .once(screeningCatalog.all(), age, profile.gender, screeningRecords)
+            .filter { it.status != ScreeningStatus.NOT_ELIGIBLE }
+
         return HealthReportData(
             profile = profile,
             period = from..to,
@@ -81,7 +115,11 @@ class GenerateHealthReportDataUseCase(
             avgFeeling = avgFeeling,
             bloodSugarAvg = sugarValues.takeIf { it.isNotEmpty() }?.average()?.toFloat(),
             temperatureAvg = tempValues.takeIf { it.isNotEmpty() }?.average()?.toFloat(),
-            bmi = bmi
+            bmi = bmi,
+            medicationIntakes = intakes,
+            medicationsById = medsById,
+            activeReminders = activeReminders,
+            eligibleScreenings = eligibility,
         )
     }
 

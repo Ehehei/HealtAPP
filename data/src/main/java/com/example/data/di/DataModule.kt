@@ -149,7 +149,13 @@ val domainModule = module {
     single { CalculateUserAgeUseCase() }
 
     // Report
-    single { GenerateHealthReportDataUseCase(get(), get(), get(), get(), get()) }
+    single {
+        GenerateHealthReportDataUseCase(
+            get(), get(), get(), get(), get(),
+            get(), get(), get(), get(), get(),
+            get(), get(),
+        )
+    }
 
     // Steps
     single { GetDailyStepSummaryUseCase(get()) }

@@ -1,5 +1,6 @@
 package com.example.health.di
 
+import com.example.health.ui.catalog.MedicationCatalogViewModel
 import com.example.health.ui.dashboard.DashboardViewModel
 import com.example.health.ui.health.StateOfHealthViewModel
 import com.example.health.ui.photos.PhotosViewModel
@@ -26,4 +27,5 @@ val appModule = module {
     viewModel { RemindersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { ScreeningsViewModel(get(), get(), get()) }
     viewModel { SosViewModel(get()) }
+    viewModel { MedicationCatalogViewModel(get(), get()) }
 }

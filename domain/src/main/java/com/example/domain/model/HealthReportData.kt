@@ -1,5 +1,6 @@
 package com.example.domain.model
 
+import com.example.domain.model.screening.ScreeningEligibility
 import java.time.LocalDate
 
 data class HealthReportData(
@@ -15,5 +16,9 @@ data class HealthReportData(
     val avgFeeling: Float?,
     val bloodSugarAvg: Float?,
     val temperatureAvg: Float?,
-    val bmi: Float?
+    val bmi: Float?,
+    val medicationIntakes: List<MedicationIntakeRecord> = emptyList(),
+    val medicationsById: Map<Long, Medication> = emptyMap(),
+    val activeReminders: List<Reminder> = emptyList(),
+    val eligibleScreenings: List<ScreeningEligibility> = emptyList(),
 )

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.BloodType
 import com.example.domain.model.Gender
+import com.example.health.ui.catalog.MedicationCatalogScreen
 import com.example.health.ui.components.ScreenTitle
 import com.example.health.ui.components.SectionCard
 import com.example.health.ui.reminders.RemindersScreen
@@ -50,6 +51,7 @@ fun ProfileScreen(
 ) {
     var showReminders by remember { mutableStateOf(false) }
     var showScreenings by remember { mutableStateOf(false) }
+    var showCatalog by remember { mutableStateOf(false) }
 
     LaunchedEffect(initialTarget) {
         when (initialTarget) {
@@ -66,6 +68,10 @@ fun ProfileScreen(
     }
     if (showScreenings) {
         ScreeningsScreen(onBack = { showScreenings = false }, modifier = modifier)
+        return
+    }
+    if (showCatalog) {
+        MedicationCatalogScreen(onBack = { showCatalog = false }, modifier = modifier)
         return
     }
 
@@ -223,6 +229,10 @@ fun ProfileScreen(
                 onClick = { showScreenings = true },
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
             ) { Text("Скрининги по программе РК") }
+            Button(
+                onClick = { showCatalog = true },
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            ) { Text("Справочник лекарств РК") }
         }
     }
 }
