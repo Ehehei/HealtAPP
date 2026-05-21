@@ -310,6 +310,7 @@ private fun ProfileEditScreen(
     var chronic by remember { mutableStateOf("") }
     var contactName by remember { mutableStateOf("") }
     var contactPhone by remember { mutableStateOf("") }
+    var saveError by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(profile) {
         profile?.let {
@@ -352,9 +353,11 @@ private fun ProfileEditScreen(
             )
             Spacer(Modifier.size(6.dp))
             OutlinedTextField(
-                birth, { birth = it },
+                birth, { birth = it; saveError = null },
                 Modifier.fillMaxWidth(),
-                label = { Text("Дата рождения yyyy-MM-dd") },
+                label = { Text("Дата рождения") },
+                placeholder = { Text("1990-05-15 или 15.05.1990", color = TextSecondary) },
+                singleLine = true,
             )
             Spacer(Modifier.size(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -416,14 +419,21 @@ private fun ProfileEditScreen(
         SectionCard {
             Button(
                 onClick = {
-                    val h = height.toFloatOrNull() ?: return@Button
-                    val w = weight.toFloatOrNull() ?: return@Button
-                    val d = runCatching { LocalDate.parse(birth) }.getOrNull() ?: return@Button
-                    vm.save(
+                    val problem = validateProfileInput(
                         name = name,
-                        heightCm = h,
-                        initialWeightKg = w,
-                        birthDate = d,
+                        heightStr = height,
+                        weightStr = weight,
+                        birthStr = birth,
+                    )
+                    if (problem != null) {
+                        saveError = problem
+                        return@Button
+                    }
+                    vm.save(
+                        name = name.trim(),
+                        heightCm = height.toFloat(),
+                        initialWeightKg = weight.toFloat(),
+                        birthDate = parseBirthDate(birth)!!,
                         gender = gender,
                         bloodType = bloodType,
                         allergies = allergies.trim(),
@@ -436,6 +446,14 @@ private fun ProfileEditScreen(
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = BrandGreen),
             ) { Text("Сохранить", fontWeight = FontWeight.SemiBold) }
+            saveError?.let {
+                Spacer(Modifier.size(8.dp))
+                Text(
+                    it,
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 12.sp,
+                )
+            }
         }
 
         SectionCard {
@@ -493,4 +511,43 @@ private fun ageNoun(age: Int): String {
         mod10 in 2..4 && mod100 !in 12..14 -> "года"
         else -> "лет"
     }
+}
+
+private val birthFormatters: List<java.time.format.DateTimeFormatter> = listOf(
+    java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+    java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"),
+    java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+    java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+)
+
+private fun parseBirthDate(input: String): LocalDate? {
+    val trimmed = input.trim()
+    if (trimmed.isBlank()) return null
+    for (fmt in birthFormatters) {
+        runCatching { return LocalDate.parse(trimmed, fmt) }
+    }
+    return null
+}
+
+private fun validateProfileInput(
+    name: String,
+    heightStr: String,
+    weightStr: String,
+    birthStr: String,
+): String? {
+    if (name.isBlank()) return "Укажи имя"
+    val h = heightStr.toFloatOrNull()
+    if (h == null || h !in 50f..250f) {
+        return "Рост должен быть числом от 50 до 250 см"
+    }
+    val w = weightStr.toFloatOrNull()
+    if (w == null || w !in 20f..400f) {
+        return "Вес должен быть числом от 20 до 400 кг"
+    }
+    val date = parseBirthDate(birthStr)
+        ?: return "Дата рождения должна быть в формате 1990-05-15 или 15.05.1990"
+    val today = LocalDate.now()
+    if (date.isAfter(today)) return "Дата рождения не может быть в будущем"
+    if (date.isBefore(today.minusYears(120))) return "Проверь дату рождения"
+    return null
 }
