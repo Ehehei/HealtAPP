@@ -6,11 +6,18 @@ import java.time.LocalDate
 
 class SyncStepsFromHealthConnectUseCase(
     private val healthConnect: HealthConnectDataSource,
-    private val stepRepository: StepRepository
+    private val stepRepository: StepRepository,
 ) {
     suspend operator fun invoke(userId: String, from: LocalDate, to: LocalDate): Result<Int> {
         if (!healthConnect.isAvailable()) {
-            return Result.failure(IllegalStateException("Health Connect is not available"))
+            return Result.failure(
+                IllegalStateException("Health Connect не установлен на устройстве"),
+            )
+        }
+        if (!healthConnect.hasReadStepsPermission()) {
+            return Result.failure(
+                SecurityException("Нет разрешения на чтение шагов из Health Connect"),
+            )
         }
 
         val hcSteps = healthConnect.getSteps(from, to)

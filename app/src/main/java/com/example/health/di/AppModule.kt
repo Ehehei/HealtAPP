@@ -16,9 +16,9 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
-    viewModel { ProfileViewModel(get(), get(), get()) }
-    viewModel { DashboardViewModel(get(), get(), get()) }
-    viewModel { StepsViewModel(get(), get(), get()) }
+    viewModel { ProfileViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { DashboardViewModel(get(), get(), get(), get()) }
+    viewModel { StepsViewModel(get(), get(), get(), get()) }
     viewModel { WeightViewModel(get(), get(), get()) }
     viewModel { PressureViewModel(get(), get(), get()) }
     viewModel { StateOfHealthViewModel(get(), get(), get()) }
@@ -26,6 +26,6 @@ val appModule = module {
     viewModel { ReportViewModel(get(), get()) }
     viewModel { RemindersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { ScreeningsViewModel(get(), get(), get()) }
-    viewModel { SosViewModel(get()) }
+    viewModel { SosViewModel(get(), get()) }
     viewModel { MedicationCatalogViewModel(get(), get()) }
 }

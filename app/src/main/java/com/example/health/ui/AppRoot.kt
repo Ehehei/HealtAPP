@@ -1,15 +1,23 @@
 package com.example.health.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ShowChart
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Emergency
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.MonitorHeart
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PictureAsPdf
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.health.ui.dashboard.DashboardScreen
 import com.example.health.ui.health.StateOfHealthScreen
 import com.example.health.ui.photos.PhotosScreen
@@ -29,22 +39,23 @@ import com.example.health.ui.profile.ProfileTarget
 import com.example.health.ui.report.ReportScreen
 import com.example.health.ui.sos.SosScreen
 import com.example.health.ui.steps.StepsScreen
-import com.example.health.ui.theme.AccentCalories
-import com.example.health.ui.theme.AccentHeart
-import com.example.health.ui.theme.AccentMinutes
-import com.example.health.ui.theme.AccentSleep
-import com.example.health.ui.theme.AccentSteps
-import com.example.health.ui.theme.AccentWater
+import com.example.health.ui.theme.BrandGreen
+import com.example.health.ui.theme.SosRed
+import com.example.health.ui.theme.SosScreenBg
+import com.example.health.ui.theme.SurfaceBg
+import com.example.health.ui.theme.SurfaceCard
+import com.example.health.ui.theme.TextDisabled
+import com.example.health.ui.theme.TextPrimary
 import com.example.health.ui.weight.WeightScreen
 
-enum class NavTab(val title: String, val color: Color) {
-    DASHBOARD("Главная", AccentSteps),
-    METRICS("Метрики", AccentMinutes),
-    HEALTH("Здоровье", AccentHeart),
-    PHOTOS("Фото", AccentSleep),
-    REPORT("PDF", AccentWater),
-    SOS("SOS", Color(0xFFD32F2F)),
-    PROFILE("Профиль", AccentCalories),
+enum class NavTab(val title: String, val icon: ImageVector) {
+    DASHBOARD("Главная", Icons.Filled.Home),
+    METRICS("Метрики", Icons.AutoMirrored.Filled.ShowChart),
+    HEALTH("Здоровье", Icons.Filled.MonitorHeart),
+    PHOTOS("Фото", Icons.Filled.CameraAlt),
+    REPORT("PDF", Icons.Filled.PictureAsPdf),
+    SOS("SOS", Icons.Filled.Emergency),
+    PROFILE("Профиль", Icons.Filled.Person),
 }
 
 @Composable
@@ -53,21 +64,40 @@ fun AppRoot() {
     var metricsSub by remember { mutableStateOf(MetricsTab.STEPS) }
     var profileTarget by remember { mutableStateOf<ProfileTarget?>(null) }
 
+    val isSos = tab == NavTab.SOS
+    val containerBg = if (isSos) SosScreenBg else SurfaceBg
+
     Scaffold(
+        containerColor = containerBg,
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = if (isSos) SosScreenBg else SurfaceCard,
+                tonalElevation = 0.dp,
+            ) {
                 NavTab.entries.forEach { t ->
+                    val selected = tab == t
+                    val isSosItem = t == NavTab.SOS
+                    val selectedColor = if (isSosItem) SosRed else BrandGreen
                     NavigationBarItem(
-                        selected = tab == t,
+                        selected = selected,
                         onClick = { tab = t },
                         icon = {
-                            Box(
-                                Modifier
-                                    .size(14.dp)
-                                    .background(t.color, CircleShape),
+                            Icon(
+                                imageVector = t.icon,
+                                contentDescription = t.title,
+                                modifier = Modifier.size(22.dp),
                             )
                         },
-                        label = { Text(t.title, maxLines = 1) },
+                        label = {
+                            Text(t.title, fontSize = 10.sp, maxLines = 1)
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = selectedColor,
+                            selectedTextColor = selectedColor,
+                            indicatorColor = Color.Transparent,
+                            unselectedIconColor = TextDisabled,
+                            unselectedTextColor = TextDisabled,
+                        ),
                     )
                 }
             }
@@ -109,13 +139,19 @@ enum class MetricsTab(val title: String) { STEPS("Шаги"), WEIGHT("Вес"), 
 
 @Composable
 fun MetricsHost(modifier: Modifier, current: MetricsTab, onChange: (MetricsTab) -> Unit) {
-    androidx.compose.foundation.layout.Column(modifier) {
-        PrimaryTabRow(selectedTabIndex = current.ordinal) {
+    Column(modifier) {
+        PrimaryTabRow(
+            selectedTabIndex = current.ordinal,
+            containerColor = SurfaceBg,
+            contentColor = TextPrimary,
+        ) {
             MetricsTab.entries.forEach { t ->
                 Tab(
                     selected = current == t,
                     onClick = { onChange(t) },
                     text = { Text(t.title) },
+                    selectedContentColor = BrandGreen,
+                    unselectedContentColor = TextDisabled,
                 )
             }
         }

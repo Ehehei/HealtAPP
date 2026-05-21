@@ -27,7 +27,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.health.ui.theme.OnSurfaceMuted
+import com.example.health.ui.theme.TextSecondary
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -59,7 +59,7 @@ fun LineChart(
         ) {
             Text(
                 "Недостаточно данных для графика",
-                color = OnSurfaceMuted,
+                color = TextSecondary,
                 fontSize = 12.sp,
             )
         }
@@ -81,7 +81,7 @@ fun LineChart(
     val density = LocalDensity.current
     val axisColor = MaterialTheme.colorScheme.outline
     val gridColor = axisColor.copy(alpha = 0.25f)
-    val labelStyle = TextStyle(fontSize = 10.sp, color = OnSurfaceMuted)
+    val labelStyle = TextStyle(fontSize = 10.sp, color = TextSecondary)
 
     val padLeftPx = with(density) { 36.dp.toPx() }
     val padRightPx = with(density) { 8.dp.toPx() }
@@ -193,7 +193,7 @@ fun ChartLegend(series: List<ChartSeries>, modifier: Modifier = Modifier) {
                         .size(10.dp)
                         .background(s.color, CircleShape),
                 )
-                Text(s.label, fontSize = 11.sp, color = OnSurfaceMuted)
+                Text(s.label, fontSize = 11.sp, color = TextSecondary)
             }
         }
     }
