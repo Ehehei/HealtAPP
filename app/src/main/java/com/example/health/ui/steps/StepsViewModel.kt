@@ -33,10 +33,6 @@ class StepsViewModel(
     private val _syncMessage = MutableStateFlow<String?>(null)
     val syncMessage: StateFlow<String?> = _syncMessage.asStateFlow()
 
-    /**
-     * Набор permission-строк, которые UI передаёт в `PermissionController` контракт.
-     * Пустой набор означает, что HC недоступен и запрашивать нечего.
-     */
     val healthConnectPermissions: Set<String> = healthConnect.requiredPermissions()
 
     init { refresh() }
@@ -50,11 +46,6 @@ class StepsViewModel(
         }
     }
 
-    /**
-     * Перед запуском импорта UI проверяет доступность HC и разрешения через этот метод.
-     * Возвращает текущее состояние, чтобы экран мог решить: запустить импорт сразу
-     * либо сначала открыть системный диалог разрешения.
-     */
     suspend fun checkHealthConnectState(): HealthConnectState = when {
         !healthConnect.isAvailable() -> HealthConnectState.NOT_INSTALLED
         !healthConnect.hasReadStepsPermission() -> HealthConnectState.NEEDS_PERMISSION

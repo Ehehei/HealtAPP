@@ -43,7 +43,6 @@ class ProfileViewModel(
     private val _bmi = MutableStateFlow<Float?>(null)
     val bmi: StateFlow<Float?> = _bmi.asStateFlow()
 
-    /** Ближайшее активное напоминание о лекарстве — для inline-чипа в «Мои напоминания». */
     val nextMedReminder: StateFlow<NextMedReminder?> = combine(
         observeReminders(Session.USER_ID),
         observeMedications(Session.USER_ID),
@@ -60,7 +59,6 @@ class ProfileViewModel(
             }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    /** Есть ли скрининг к прохождению — для inline-чипа в «Скрининги РК». */
     val screeningsPending: StateFlow<Boolean> =
         getEligibleScreenings(Session.USER_ID)
             .map { list -> list.any { it.status == ScreeningStatus.DUE_NOW } }

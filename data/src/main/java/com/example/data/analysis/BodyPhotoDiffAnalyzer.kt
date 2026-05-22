@@ -10,36 +10,24 @@ import java.time.temporal.ChronoUnit
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-/**
- * Алгоритм сравнения двух фото тела для отображения "прогресса".
- *
- * Главная философия: не давать пользователю зацикливаться на минимальных колебаниях,
- * которые могут быть просто шумом (освещение, поза, водный баланс).
- *
- * Поэтому мы:
- * 1) требуем минимальный интервал между фото (по умолчанию 14 дней),
- * 2) сглаживаем визуальные различия через 16x16 perceptual hash и порог,
- * 3) комбинируем визуальный сигнал с реальной дельтой по весу,
- * 4) выдаём один из понятных вердиктов вместо «процента похудения».
- */
 class BodyPhotoDiffAnalyzer(
     private val storage: PhotoStorage,
     private val minIntervalDays: Int = 14,
-    private val visualNoiseThreshold: Float = 0.08f, // pHash distance ниже которой - шум
-    private val weightNoiseKg: Float = 0.7f,         // дельта веса меньше которой - шум
+    private val visualNoiseThreshold: Float = 0.08f,
+    private val weightNoiseKg: Float = 0.7f,
 ) {
 
     data class Verdict(
         val verdict: ProgressVerdict,
-        val visualChange: Float,         // 0..1, после порога
+        val visualChange: Float,
         val weightDeltaKg: Float?,
         val daysBetween: Int,
         val message: String,
     )
 
     enum class ProgressVerdict {
-        TOO_EARLY,      // меньше minIntervalDays
-        NOISE,          // визуально и по весу — почти ничего, не зацикливайся
+        TOO_EARLY,
+        NOISE,
         SUBTLE_PROGRESS,
         CLEAR_PROGRESS,
         REGRESSION,
@@ -101,7 +89,6 @@ class BodyPhotoDiffAnalyzer(
         return if (s > 0) "+$s" else "$s"
     }
 
-    /** 16x16 grayscale average-hash distance, нормированный в 0..1. */
     private fun perceptualDistance(pathA: String, pathB: String): Float {
         val a = downscaleGray(pathA) ?: return 0f
         val b = downscaleGray(pathB) ?: return 0f
@@ -127,7 +114,7 @@ class BodyPhotoDiffAnalyzer(
         scaled.getPixels(px, 0, SIZE, 0, 0, SIZE, SIZE)
         for (i in px.indices) {
             val c = px[i]
-            // Luminance approx
+
             out[i] = (Color.red(c) * 30 + Color.green(c) * 59 + Color.blue(c) * 11) / 100
         }
         bmp.recycle()

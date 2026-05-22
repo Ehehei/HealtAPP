@@ -62,7 +62,7 @@ fun PressureScreen(vm: PressureViewModel = koinViewModel()) {
         Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState()),
     ) {
-        // Hero
+
         SectionCard {
             LabelXsText("Среднее за 30 дней")
             Spacer(Modifier.height(6.dp))
@@ -81,7 +81,6 @@ fun PressureScreen(vm: PressureViewModel = koinViewModel()) {
             } ?: Text("Нет данных за 30 дней", color = TextSecondary)
         }
 
-        // Динамика
         SectionCard {
             LabelXsText("Динамика")
             Spacer(Modifier.height(6.dp))
@@ -109,7 +108,6 @@ fun PressureScreen(vm: PressureViewModel = koinViewModel()) {
             ChartLegend(series = series)
         }
 
-        // Новое измерение
         SectionCard {
             LabelXsText("Новое измерение")
             Spacer(Modifier.height(8.dp))
@@ -142,7 +140,6 @@ fun PressureScreen(vm: PressureViewModel = koinViewModel()) {
             error?.let { Text(it, color = MaterialTheme.colorScheme.error, fontSize = 12.sp) }
         }
 
-        // История
         SectionCard {
             LabelXsText("История")
             Spacer(Modifier.height(8.dp))

@@ -74,7 +74,6 @@ import org.koin.dsl.module
 
 val dataModule = module {
 
-    // ---- Database ----
     single {
         Room.databaseBuilder(
             androidContext(),
@@ -96,7 +95,6 @@ val dataModule = module {
     single { get<HealthDatabase>().screeningRecordDao() }
     single { get<HealthDatabase>().medicationIntakeDao() }
 
-    // ---- Repositories ----
     singleOf(::BloodPressureRepositoryImpl) { bind<BloodPressureRepository>() }
     singleOf(::BodyPhotoRepositoryImpl) { bind<BodyPhotoRepository>() }
     singleOf(::StateOfHealthRepositoryImpl) { bind<StateOfHealthRepository>() }
@@ -108,47 +106,38 @@ val dataModule = module {
     singleOf(::ScreeningRecordRepositoryImpl) { bind<ScreeningRecordRepository>() }
     singleOf(::MedicationIntakeRepositoryImpl) { bind<MedicationIntakeRepository>() }
 
-    // ---- Catalogs ----
     single<ScreeningCatalog> { KzScreeningCatalog() }
     single<MedicationCatalogRepository> { KzMedicationCatalog() }
 
-    // ---- External sources ----
     single<HealthConnectDataSource> { HealthConnectDataSourceImpl(androidContext()) }
 
-    // ---- Storage / utilities ----
     single { PhotoStorage(androidContext()) }
     single { BodyPhotoDiffAnalyzer(get()) }
     single { PdfReportGenerator(androidContext()) }
 
-    // ---- Notifications ----
     single { ReminderScheduler(androidContext()) }
     single { ReminderNotifier(androidContext()) }
 }
 
 val domainModule = module {
-    // Blood pressure
+
     single { SaveBloodPressureUseCase(get()) }
     single { ObserveBloodPressureHistoryUseCase(get()) }
     single { GetBloodPressureStatsUseCase(get()) }
 
-    // Dashboard
     single { GetDashboardSummaryUseCase(get(), get(), get(), get(), get()) }
 
-    // Health
     single { SaveStateOfHealthUseCase(get()) }
     single { GetHealthTrendUseCase(get()) }
 
-    // Photo
     single { SaveBodyPhotoUseCase(get()) }
     single { ObserveBodyPhotosByTypeUseCase(get()) }
     single { GetPhotoComparisonPairsUseCase(get()) }
 
-    // Profile
     single { GetCurrentUserProfileUseCase(get()) }
     single { CalculateBmiUseCase(get(), get()) }
     single { CalculateUserAgeUseCase() }
 
-    // Report
     single {
         GenerateHealthReportDataUseCase(
             get(), get(), get(), get(), get(),
@@ -157,16 +146,13 @@ val domainModule = module {
         )
     }
 
-    // Steps
     single { GetDailyStepSummaryUseCase(get()) }
     single { GetWeeklyStepStatsUseCase(get()) }
     single { SyncStepsFromHealthConnectUseCase(get(), get()) }
 
-    // Weight
     single { SaveWeightRecordUseCase(get()) }
     single { GetWeightProgressUseCase(get(), get()) }
 
-    // Medication
     single { SaveMedicationUseCase(get()) }
     single { ObserveMedicationsUseCase(get()) }
     single { DeleteMedicationUseCase(get()) }
@@ -174,13 +160,11 @@ val domainModule = module {
     single { LogMedicationIntakeUseCase(get()) }
     single { ObserveMedicationIntakesUseCase(get()) }
 
-    // Reminder
     single { SaveReminderUseCase(get()) }
     single { ObserveRemindersUseCase(get()) }
     single { ToggleReminderUseCase(get()) }
     single { DeleteReminderUseCase(get()) }
 
-    // Screenings
     single { GetEligibleScreeningsUseCase(get(), get(), get(), get()) }
     single { LogScreeningUseCase(get(), get()) }
 }

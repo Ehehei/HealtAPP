@@ -27,8 +27,7 @@ class PhotosViewModel(
     private val getPairs: GetPhotoComparisonPairsUseCase,
     private val storage: PhotoStorage,
     private val analyzer: BodyPhotoDiffAnalyzer,
-    // Inject WeightRepository extra so analyzer can pull weights for the dates
-    // Не используется напрямую тут, но оставим для расширения.
+
 ) : ViewModel() {
 
     private val _type = MutableStateFlow(PhotoType.BODY)
@@ -50,7 +49,6 @@ class PhotosViewModel(
 
     fun setType(type: PhotoType) { _type.value = type }
 
-    /** Читает (и расшифровывает) содержимое фото для рендеринга в UI. */
     fun bytesOf(path: String): ByteArray? = storage.readBytes(path)
 
     fun addPhoto(uri: Uri, type: PhotoType, note: String? = null) {
@@ -76,7 +74,7 @@ class PhotosViewModel(
     fun refreshPairs() {
         viewModelScope.launch {
             _pairs.value = getPairs(Session.USER_ID, PhotoType.BODY)
-            // Авто-вердикт по последней паре
+
             _pairs.value.lastOrNull()?.let { pair ->
                 _verdict.value = analyzer.analyze(pair.before, pair.after)
             }

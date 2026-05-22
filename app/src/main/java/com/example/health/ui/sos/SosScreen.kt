@@ -85,7 +85,7 @@ fun SosScreen(modifier: Modifier = Modifier, vm: SosViewModel = koinViewModel())
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
     ) {
-        // Хедер на #FEE2E2
+
         Row(
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -109,7 +109,6 @@ fun SosScreen(modifier: Modifier = Modifier, vm: SosViewModel = koinViewModel())
             )
         }
 
-        // Большая круглая кнопка с обводкой
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Box(
                 Modifier
@@ -149,7 +148,6 @@ fun SosScreen(modifier: Modifier = Modifier, vm: SosViewModel = koinViewModel())
             Text(" · откроет набор номера", color = TextSecondary, fontSize = 13.sp)
         }
 
-        // SMS-кнопка с обводкой
         val phone = profile?.emergencyContactPhone.orEmpty()
         val phoneFilled = phone.isNotBlank()
         Row(
@@ -204,7 +202,6 @@ fun SosScreen(modifier: Modifier = Modifier, vm: SosViewModel = koinViewModel())
             )
         }
 
-        // Карточка медкарты
         SectionCard(background = SurfaceCard) {
             LabelXsText("Медкарта")
             Spacer(Modifier.size(6.dp))
@@ -245,7 +242,6 @@ fun SosScreen(modifier: Modifier = Modifier, vm: SosViewModel = koinViewModel())
             )
         }
 
-        // Карточка контакта
         SectionCard(background = SurfaceCard) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
@@ -293,7 +289,6 @@ fun SosScreen(modifier: Modifier = Modifier, vm: SosViewModel = koinViewModel())
             }
         }
 
-        // Пояснение
         SectionCard(background = SosCardBg) {
             Text(
                 "Звонок 103 откроет системный диалер с уже набранным номером — нажми зелёную кнопку, чтобы соединиться. " +

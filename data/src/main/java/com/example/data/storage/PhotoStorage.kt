@@ -9,10 +9,6 @@ import com.google.crypto.tink.integration.android.AndroidKeysetManager
 import java.io.File
 import java.util.UUID
 
-/**
- * Сохраняет фото локально, в private app storage, шифруя содержимое AES-256-GCM (Google Tink).
- * Ключ мастер-шифрования генерируется в Android Keystore и не покидает устройство.
- */
 class PhotoStorage(private val context: Context) {
 
     init {
@@ -32,10 +28,6 @@ class PhotoStorage(private val context: Context) {
     private val rootDir: File
         get() = File(context.filesDir, "user_photos").apply { if (!exists()) mkdirs() }
 
-    /**
-     * Считывает [sourceUri], шифрует содержимое и сохраняет в приватную директорию приложения.
-     * Возвращает абсолютный путь к зашифрованному файлу.
-     */
     fun savePhoto(sourceUri: Uri, subDir: String = "body"): String {
         val dir = File(rootDir, subDir).apply { if (!exists()) mkdirs() }
         val target = File(dir, "${UUID.randomUUID()}.enc")
@@ -48,10 +40,6 @@ class PhotoStorage(private val context: Context) {
         return target.absolutePath
     }
 
-    /**
-     * Возвращает расшифрованное содержимое файла (или исходные байты, если файл старого формата .jpg).
-     * Используется и Coil-рендером в UI, и алгоритмом сравнения фото.
-     */
     fun readBytes(path: String): ByteArray? {
         val file = File(path)
         if (!file.exists()) return null

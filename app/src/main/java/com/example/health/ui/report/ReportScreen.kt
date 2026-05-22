@@ -80,7 +80,7 @@ fun ReportScreen(modifier: Modifier = Modifier, vm: ReportViewModel = koinViewMo
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState()),
     ) {
-        // Заголовок с иконкой
+
         Row(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 18.dp, bottom = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -117,7 +117,7 @@ fun ReportScreen(modifier: Modifier = Modifier, vm: ReportViewModel = koinViewMo
             }
 
             Spacer(Modifier.height(14.dp))
-            // Большая тёмная кнопка
+
             Box(
                 Modifier
                     .fillMaxWidth()

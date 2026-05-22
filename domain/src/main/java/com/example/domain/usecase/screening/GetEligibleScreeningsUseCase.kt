@@ -12,10 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import java.time.LocalDate
 
-/**
- * Объединяет каталог скринингов, профиль пользователя и историю прохождений
- * и выдаёт по каждому скринингу статус с датой следующего срока.
- */
 class GetEligibleScreeningsUseCase(
     private val catalog: ScreeningCatalog,
     private val recordRepository: ScreeningRecordRepository,
@@ -62,7 +58,7 @@ class GetEligibleScreeningsUseCase(
             return ScreeningEligibility(screening, ScreeningStatus.DUE_NOW)
         }
         if (screening.intervalMonths <= 0) {
-            // Однократный — пройдено, считаем UPCOMING без даты.
+
             return ScreeningEligibility(screening, ScreeningStatus.UPCOMING, last.date)
         }
         val nextDue = last.date.plusMonths(screening.intervalMonths.toLong())

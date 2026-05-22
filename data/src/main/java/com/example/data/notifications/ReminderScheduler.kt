@@ -10,10 +10,6 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-/**
- * Планирует точные алармы на ближайшее срабатывание Reminder через AlarmManager.
- * После срабатывания [ReminderReceiver] перепланирует следующее.
- */
 class ReminderScheduler(private val context: Context) {
 
     private val alarmManager: AlarmManager =

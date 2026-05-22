@@ -82,7 +82,6 @@ fun PhotosScreen(modifier: Modifier = Modifier, vm: PhotosViewModel = koinViewMo
     ) {
         ScreenTitle("Фото")
 
-        // Табы Тело/Анализы — активный тёмный
         Row(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -103,11 +102,10 @@ fun PhotosScreen(modifier: Modifier = Modifier, vm: PhotosViewModel = koinViewMo
 
         val list = if (type == PhotoType.BODY) body else analyses
 
-        // 2-колоночная сетка через Row-pairs
         SectionCard {
             LabelXsText("Галерея · ${list.size}")
             Spacer(Modifier.height(10.dp))
-            val withAdd: List<BodyPhoto?> = list + null // последняя клетка — кнопка добавить
+            val withAdd: List<BodyPhoto?> = list + null
             withAdd.chunked(2).forEach { rowItems ->
                 Row(
                     Modifier.fillMaxWidth().padding(bottom = 8.dp),
@@ -122,7 +120,7 @@ fun PhotosScreen(modifier: Modifier = Modifier, vm: PhotosViewModel = koinViewMo
                             }
                         }
                     }
-                    // если в строке только одна — пустая ячейка для выравнивания
+
                     if (rowItems.size == 1) {
                         Spacer(Modifier.weight(1f))
                     }
@@ -131,7 +129,7 @@ fun PhotosScreen(modifier: Modifier = Modifier, vm: PhotosViewModel = koinViewMo
         }
 
         if (type == PhotoType.BODY) {
-            // Тёмная кнопка «Сравнить прогресс»
+
             SectionCard(background = NeutralDark) {
                 Row(
                     Modifier
@@ -181,7 +179,6 @@ fun PhotosScreen(modifier: Modifier = Modifier, vm: PhotosViewModel = koinViewMo
             }
         }
 
-        // AES-256 бейдж
         Box(
             Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)

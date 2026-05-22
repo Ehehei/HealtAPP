@@ -54,7 +54,7 @@ fun WeightScreen(vm: WeightViewModel = koinViewModel()) {
         Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState()),
     ) {
-        // Hero
+
         SectionCard {
             LabelXsText("Текущий вес")
             Spacer(Modifier.height(4.dp))
@@ -76,7 +76,6 @@ fun WeightScreen(vm: WeightViewModel = koinViewModel()) {
             } ?: Text("Добавь первое измерение", color = TextSecondary)
         }
 
-        // Динамика
         SectionCard {
             LabelXsText("Динамика")
             Spacer(Modifier.height(6.dp))
@@ -94,7 +93,6 @@ fun WeightScreen(vm: WeightViewModel = koinViewModel()) {
             LineChart(series = series, yLabelFormat = { "%.1f".format(it) })
         }
 
-        // Новое измерение
         SectionCard {
             LabelXsText("Новое измерение")
             Spacer(Modifier.height(8.dp))
@@ -115,7 +113,6 @@ fun WeightScreen(vm: WeightViewModel = koinViewModel()) {
             error?.let { Text(it, color = MaterialTheme.colorScheme.error, fontSize = 12.sp) }
         }
 
-        // История
         SectionCard {
             LabelXsText("История")
             Spacer(Modifier.height(8.dp))

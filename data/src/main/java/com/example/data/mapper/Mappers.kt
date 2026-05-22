@@ -41,7 +41,6 @@ fun LocalDateTime.toEpochMillis(): Long =
 fun Long.toLocalDateTime(): LocalDateTime =
     Instant.ofEpochMilli(this).atZone(zone).toLocalDateTime()
 
-// ----- BloodPressure -----
 fun BloodPressureEntity.toDomain() = BloodPressure(
     id = id,
     userId = userId,
@@ -60,7 +59,6 @@ fun BloodPressure.toEntity() = BloodPressureEntity(
     dateEpochMillis = date.toEpochMillis(),
 )
 
-// ----- BodyPhoto -----
 fun BodyPhotoEntity.toDomain() = BodyPhoto(
     id = id,
     userId = userId,
@@ -79,7 +77,6 @@ fun BodyPhoto.toEntity() = BodyPhotoEntity(
     dateEpochMillis = date.toEpochMillis(),
 )
 
-// ----- StateOfHealth -----
 fun StateOfHealthEntity.toDomain() = StateOfHealth(
     id = id,
     userId = userId,
@@ -100,7 +97,6 @@ fun StateOfHealth.toEntity() = StateOfHealthEntity(
     dateEpochDay = date.toEpochDay(),
 )
 
-// ----- Step -----
 fun StepEntity.toDomain() = StepRecord(
     id = id,
     userId = userId,
@@ -115,7 +111,6 @@ fun StepRecord.toEntity() = StepEntity(
     dateEpochDay = date.toEpochDay(),
 )
 
-// ----- UserProfile -----
 fun UserProfileEntity.toDomain() = UserProfile(
     id = id,
     name = name,
@@ -144,7 +139,6 @@ fun UserProfile.toEntity() = UserProfileEntity(
     emergencyContactPhone = emergencyContactPhone,
 )
 
-// ----- Weight -----
 fun WeightEntity.toDomain() = WeightRecord(
     id = id,
     userId = userId,
@@ -159,7 +153,6 @@ fun WeightRecord.toEntity() = WeightEntity(
     dateEpochDay = date.toEpochDay(),
 )
 
-// ----- Medication -----
 fun MedicationEntity.toDomain() = Medication(
     id = id,
     userId = userId,
@@ -180,7 +173,6 @@ fun Medication.toEntity() = MedicationEntity(
     registeredInKz = registeredInKz,
 )
 
-// ----- MedicationIntake -----
 fun MedicationIntakeEntity.toDomain() = MedicationIntakeRecord(
     id = id,
     userId = userId,
@@ -199,7 +191,6 @@ fun MedicationIntakeRecord.toEntity() = MedicationIntakeEntity(
     dose = dose,
 )
 
-// ----- Reminder -----
 private val ALL_DAYS: Set<DayOfWeek> = DayOfWeek.entries.toSet()
 
 fun Set<DayOfWeek>.toMask(): Int =
@@ -236,7 +227,6 @@ fun Reminder.toEntity() = ReminderEntity(
     createdAtMillis = createdAt.toEpochMilli(),
 )
 
-// ----- ScreeningRecord -----
 fun ScreeningRecordEntity.toDomain() = ScreeningRecord(
     id = id,
     userId = userId,

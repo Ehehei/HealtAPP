@@ -84,7 +84,6 @@ fun StateOfHealthScreen(modifier: Modifier = Modifier, vm: StateOfHealthViewMode
             modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
         )
 
-        // Главная карточка
         SectionCard {
             Text("Как вы себя чувствуете?", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
             Spacer(Modifier.height(10.dp))
@@ -143,7 +142,6 @@ fun StateOfHealthScreen(modifier: Modifier = Modifier, vm: StateOfHealthViewMode
             error?.let { Text(it, color = MaterialTheme.colorScheme.error, fontSize = 12.sp) }
         }
 
-        // Динамика
         SectionCard {
             LabelXsText("Динамика самочувствия (1–5)")
             Spacer(Modifier.height(6.dp))
@@ -163,7 +161,6 @@ fun StateOfHealthScreen(modifier: Modifier = Modifier, vm: StateOfHealthViewMode
             )
         }
 
-        // Тренд за 30 дней
         SectionCard {
             LabelXsText("Тренд за 30 дней")
             Spacer(Modifier.height(6.dp))
@@ -181,7 +178,6 @@ fun StateOfHealthScreen(modifier: Modifier = Modifier, vm: StateOfHealthViewMode
             }
         }
 
-        // История
         SectionCard {
             LabelXsText("История")
             Spacer(Modifier.height(8.dp))

@@ -30,7 +30,6 @@ class DashboardViewModel(
     private val _state = MutableStateFlow<DashboardSummary?>(null)
     val state: StateFlow<DashboardSummary?> = _state.asStateFlow()
 
-    /** 7 нормированных (0..1) значений шагов по дням, последний — сегодня. */
     private val _weekBars = MutableStateFlow(List(7) { 0.4f })
     val weekBars: StateFlow<List<Float>> = _weekBars.asStateFlow()
 

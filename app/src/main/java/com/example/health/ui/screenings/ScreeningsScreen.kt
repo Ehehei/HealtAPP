@@ -83,7 +83,6 @@ fun ScreeningsScreen(
         val (eligible, rest) = items.partition { it.status != ScreeningStatus.NOT_ELIGIBLE }
         val dueCount = eligible.count { it.status == ScreeningStatus.DUE_NOW }
 
-        // Heads-up — сколько положено сейчас
         if (dueCount > 0) {
             SectionCard(background = AmberSoftBg) {
                 Row(verticalAlignment = Alignment.CenterVertically) {

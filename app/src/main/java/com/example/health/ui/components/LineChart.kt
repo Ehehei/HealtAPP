@@ -109,7 +109,6 @@ fun LineChart(
         fun yOf(value: Float): Float =
             plotBottom - (value - yMin) / yRange * plotH
 
-        // grid (3 lines: top/middle/bottom)
         listOf(0f, 0.5f, 1f).forEach { frac ->
             val y = plotTop + plotH * frac
             drawLine(
@@ -121,7 +120,6 @@ fun LineChart(
             )
         }
 
-        // Y-labels (max top, mid, min bottom)
         listOf(yMax, (yMin + yMax) / 2f, yMin).forEachIndexed { idx, value ->
             val frac = idx * 0.5f
             val y = plotTop + plotH * frac
@@ -138,7 +136,6 @@ fun LineChart(
             )
         }
 
-        // X-labels: даты по краям
         val startDate = LocalDate.ofEpochDay(xMin).format(dateFmt)
         val endDate = LocalDate.ofEpochDay(xMax).format(dateFmt)
         val startLayout = measurer.measure(startDate, labelStyle)
@@ -152,7 +149,6 @@ fun LineChart(
             topLeft = Offset(plotRight - endLayout.size.width, plotBottom + 4f),
         )
 
-        // series
         series.forEach { s ->
             val sorted = s.points.sortedBy { it.xEpochDay }
             if (sorted.size < 2) return@forEach

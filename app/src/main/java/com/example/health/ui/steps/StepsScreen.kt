@@ -105,7 +105,7 @@ fun StepsScreen(vm: StepsViewModel = koinViewModel()) {
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState()),
     ) {
-        // Hero — ring + сегодня
+
         SectionCard(background = BrandGreenSoftBg, borderColor = BrandGreenSoftBorder) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                 LabelXsText("Шаги сегодня", color = BrandGreenText)
@@ -125,7 +125,6 @@ fun StepsScreen(vm: StepsViewModel = koinViewModel()) {
             }
         }
 
-        // Неделя — bar chart с подписями дней
         SectionCard {
             LabelXsText("Неделя")
             Spacer(Modifier.height(10.dp))
@@ -169,7 +168,6 @@ fun StepsScreen(vm: StepsViewModel = koinViewModel()) {
             }
         }
 
-        // Статы — 3 в ряд
         Row(
             modifier = Modifier.padding(horizontal = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -179,7 +177,6 @@ fun StepsScreen(vm: StepsViewModel = koinViewModel()) {
             StatBox(label = "Всего", value = formatThousand(total), color = TextPrimary, modifier = Modifier.weight(1f))
         }
 
-        // Импорт
         SectionCard {
             Button(
                 onClick = onImportClick,

@@ -17,11 +17,6 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
-/**
- * Генерирует PDF с самочувствием пользователя за период.
- * Возвращает content:// URI через FileProvider, чтобы файл можно было сразу
- * передать в Intent.ACTION_SEND и отправить врачу.
- */
 class PdfReportGenerator(private val context: Context) {
 
     private val dateFmt: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
@@ -46,12 +41,10 @@ class PdfReportGenerator(private val context: Context) {
         data.bmi?.let { r.drawText("ИМТ: ${"%.1f".format(it)}", body); r.advance(16f) }
         r.advance(12f)
 
-        // ----- Шаги -----
         r.section("Активность", h2)
         r.drawText("Средние шаги в день: ${data.avgDailySteps}", body); r.advance(14f)
         r.drawText("Дней с записями: ${data.stepRecords.size}", muted); r.advance(22f)
 
-        // ----- Вес -----
         r.section("Вес", h2)
         val first = data.weightRecords.minByOrNull { it.date }
         val last = data.weightRecords.maxByOrNull { it.date }
@@ -68,7 +61,6 @@ class PdfReportGenerator(private val context: Context) {
         }
         r.advance(8f)
 
-        // ----- Давление -----
         r.section("Артериальное давление", h2)
         data.bloodPressureStats?.let { stats ->
             r.drawText(
@@ -87,7 +79,6 @@ class PdfReportGenerator(private val context: Context) {
             r.drawText("Нет записей.", muted); r.advance(18f)
         }
 
-        // ----- Самочувствие -----
         r.section("Общее самочувствие", h2)
         data.avgFeeling?.let {
             r.drawText("Средний уровень (1-5): ${"%.1f".format(it)}", body); r.advance(14f)
@@ -100,7 +91,6 @@ class PdfReportGenerator(private val context: Context) {
         }
         r.advance(12f)
 
-        // ----- Журнал давления (последние 10) -----
         if (data.bloodPressureRecords.isNotEmpty()) {
             r.section("Последние измерения давления", h2)
             data.bloodPressureRecords.take(10).forEach { bp ->
@@ -112,7 +102,6 @@ class PdfReportGenerator(private val context: Context) {
             r.advance(6f)
         }
 
-        // ----- История приёмов лекарств -----
         r.section("История приёмов лекарств", h2)
         if (data.medicationIntakes.isEmpty()) {
             r.drawText("Нет записей за период.", muted); r.advance(18f)
@@ -140,7 +129,6 @@ class PdfReportGenerator(private val context: Context) {
             r.advance(6f)
         }
 
-        // ----- Активные напоминания -----
         r.section("Активные напоминания", h2)
         if (data.activeReminders.isEmpty()) {
             r.drawText("Нет включённых напоминаний.", muted); r.advance(18f)
@@ -151,7 +139,6 @@ class PdfReportGenerator(private val context: Context) {
             r.advance(6f)
         }
 
-        // ----- Скрининги РК -----
         r.section("Скрининги по программе РК", h2)
         if (data.eligibleScreenings.isEmpty()) {
             r.drawText("Подходящих скринингов по возрасту/полу нет.", muted); r.advance(18f)
@@ -232,10 +219,6 @@ class PdfReportGenerator(private val context: Context) {
         MedicationForm.OTHER -> "форма не указана"
     }
 
-    /**
-     * Хелпер для отрисовки многостраничного PDF. Создаёт новые страницы по мере
-     * наполнения, чтобы блоки не обрезались. A4 595×842, поля 40/50.
-     */
     private inner class Renderer(private val pdf: PdfDocument) {
         private val pageWidth = 595
         private val pageHeight = 842

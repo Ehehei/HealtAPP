@@ -4,16 +4,6 @@ import com.example.domain.model.Gender
 import com.example.domain.model.screening.Screening
 import com.example.domain.repository.ScreeningCatalog
 
-/**
- * Каталог государственных скринингов Республики Казахстан.
- *
- * Источник: приказ Министра здравоохранения РК «Об утверждении правил оказания медицинской
- * помощи в рамках гарантированного объёма бесплатной медицинской помощи» — раздел о
- * целевых группах профилактических медосмотров и скрининговых исследований.
- *
- * Данные представлены в учебных целях. Точные возрастные группы и периодичность необходимо
- * сверять в поликлинике прикрепления — приказ обновляется. Дата сверки указана в sourceUpdatedOn.
- */
 class KzScreeningCatalog : ScreeningCatalog {
 
     override val sourceLabel: String =

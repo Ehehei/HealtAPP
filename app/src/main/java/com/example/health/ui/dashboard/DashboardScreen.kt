@@ -85,7 +85,7 @@ fun DashboardScreen(
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState()),
     ) {
-        // Header: дата + приветствие
+
         Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 18.dp, bottom = 4.dp)) {
             Text(
                 text = dateFmt.format(today).replaceFirstChar { it.titlecase(ruLocale) },
@@ -100,7 +100,6 @@ fun DashboardScreen(
             )
         }
 
-        // Hero — шаги сегодня на зелёном фоне
         HeroSteps(
             steps = state?.todaySteps ?: 0,
             goal = 10_000,
@@ -108,7 +107,6 @@ fun DashboardScreen(
             weekBars = bars,
         )
 
-        // 2×2 сетка метрик
         Row(
             modifier = Modifier.padding(horizontal = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -184,7 +182,6 @@ fun DashboardScreen(
             }
         }
 
-        // Запланировано
         if (pendingScreenings > 0 || todayReminders > 0) {
             SectionCard {
                 LabelXsText("Запланировано")
@@ -209,7 +206,6 @@ fun DashboardScreen(
             }
         }
 
-        // Быстрые действия
         SectionCard {
             LabelXsText("Быстрые действия")
             Spacer(Modifier.height(8.dp))

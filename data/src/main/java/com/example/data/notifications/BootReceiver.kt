@@ -10,10 +10,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-/**
- * После перезагрузки устройства Android сбрасывает все алармы.
- * Этот receiver проходит по всем enabled-напоминаниям пользователя и переустанавливает их.
- */
 class BootReceiver : BroadcastReceiver(), KoinComponent {
 
     private val reminderRepository: ReminderRepository by inject()

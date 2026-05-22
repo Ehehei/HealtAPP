@@ -5,19 +5,6 @@ import com.example.domain.model.MedicationForm
 import com.example.domain.repository.MedicationCatalogRepository
 import java.util.Locale
 
-/**
- * Локальный справочник лекарств с прицелом на рынок РК.
- *
- * Источник: Государственный реестр лекарственных средств и медицинских изделий РК
- * (ndda.kz). Данные представлены в учебных целях, объём ограничен 30 препаратами
- * из наиболее распространённых терапевтических групп. Точную информацию о
- * регистрации, форме выпуска и условиях отпуска следует уточнять в реестре или у
- * провизора.
- *
- * Несколько позиций намеренно помечены `registeredInKz = false` — это привозные
- * аналоги, часто запрашиваемые пользователями. Цель — показать, что приложение
- * предупреждает о потенциальной недоступности препарата в аптеках РК.
- */
 class KzMedicationCatalog : MedicationCatalogRepository {
 
     override val sourceLabel: String =
@@ -26,7 +13,7 @@ class KzMedicationCatalog : MedicationCatalogRepository {
     override val sourceUpdatedOn: String = "сверено: 2024-09"
 
     private val items: List<MedicationCatalogItem> = listOf(
-        // ---- Сердечно-сосудистые ----
+
         item("Амлодипин", "Амлодипин-Тева", MedicationForm.TABLET, true, GROUP_CVD, "по рецепту"),
         item("Эналаприл", "Энап", MedicationForm.TABLET, true, GROUP_CVD, "по рецепту"),
         item("Лозартан", "Лориста", MedicationForm.TABLET, true, GROUP_CVD, "по рецепту"),
@@ -34,41 +21,34 @@ class KzMedicationCatalog : MedicationCatalogRepository {
         item("Индапамид", "Арифон ретард", MedicationForm.TABLET, true, GROUP_CVD, "по рецепту"),
         item("Нитроглицерин", "Нитроминт", MedicationForm.OTHER, true, GROUP_CVD, "сублингвально / спрей"),
 
-        // ---- Антикоагулянты / гиполипидемические ----
         item("Ацетилсалициловая кислота", "Кардиомагнил", MedicationForm.TABLET, true, GROUP_BLOOD, "безрецептурный"),
         item("Аторвастатин", "Аторис", MedicationForm.TABLET, true, GROUP_BLOOD, "по рецепту"),
         item("Розувастатин", "Крестор", MedicationForm.TABLET, false, GROUP_BLOOD, "не во всех аптеках РК"),
 
-        // ---- Эндокринология ----
         item("Метформин", "Глюкофаж", MedicationForm.TABLET, true, GROUP_ENDO, "по рецепту"),
         item("Гликлазид", "Диабетон MR", MedicationForm.TABLET, true, GROUP_ENDO, "по рецепту"),
         item("Левотироксин натрия", "L-Тироксин", MedicationForm.TABLET, true, GROUP_ENDO, "по рецепту"),
         item("Инсулин гларгин", "Лантус СолоСтар", MedicationForm.INJECTION, true, GROUP_ENDO, "по рецепту"),
 
-        // ---- Обезболивающие / НПВС ----
         item("Парацетамол", "Панадол", MedicationForm.TABLET, true, GROUP_PAIN, "безрецептурный"),
         item("Ибупрофен", "Нурофен", MedicationForm.TABLET, true, GROUP_PAIN, "безрецептурный"),
         item("Кеторолак", "Кетанов", MedicationForm.TABLET, true, GROUP_PAIN, "по рецепту"),
         item("Диклофенак", "Вольтарен", MedicationForm.OINTMENT, true, GROUP_PAIN, "наружное"),
 
-        // ---- Желудочно-кишечный тракт ----
         item("Омепразол", "Омез", MedicationForm.CAPSULE, true, GROUP_GI, "безрецептурный"),
         item("Лоперамид", "Имодиум", MedicationForm.CAPSULE, true, GROUP_GI, "безрецептурный"),
         item("Дротаверин", "Но-шпа", MedicationForm.TABLET, true, GROUP_GI, "безрецептурный"),
         item("Урсодезоксихолевая кислота", "Урсосан", MedicationForm.CAPSULE, true, GROUP_GI, "по рецепту"),
 
-        // ---- Антибиотики ----
         item("Амоксициллин + клавулановая кислота", "Аугментин", MedicationForm.TABLET, true, GROUP_ABX, "по рецепту"),
         item("Азитромицин", "Сумамед", MedicationForm.CAPSULE, true, GROUP_ABX, "по рецепту"),
         item("Цефиксим", "Супракс", MedicationForm.CAPSULE, true, GROUP_ABX, "по рецепту"),
 
-        // ---- Респираторные / аллергия ----
         item("Сальбутамол", "Вентолин", MedicationForm.OTHER, true, GROUP_RESP, "ингалятор"),
         item("Будесонид + формотерол", "Симбикорт Турбухалер", MedicationForm.OTHER, true, GROUP_RESP, "ингалятор, по рецепту"),
         item("Цетиризин", "Зодак", MedicationForm.DROPS, true, GROUP_RESP, "безрецептурный"),
         item("Лоратадин", "Кларитин", MedicationForm.TABLET, true, GROUP_RESP, "безрецептурный"),
 
-        // ---- Витамины / прочее ----
         item("Колекальциферол (вит. D3)", "Аквадетрим", MedicationForm.DROPS, true, GROUP_VIT, "безрецептурный"),
         item("Мелатонин", "Мелаксен", MedicationForm.TABLET, false, GROUP_VIT, "БАД, не во всех аптеках РК"),
     )

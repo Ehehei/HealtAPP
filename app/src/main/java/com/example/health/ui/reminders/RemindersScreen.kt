@@ -138,7 +138,6 @@ fun RemindersScreen(
             ExactAlarmBanner()
         }
 
-        // Мои препараты
         SectionCard {
             SectionHeader(
                 icon = Icons.Filled.Medication,
@@ -179,7 +178,6 @@ fun RemindersScreen(
             }
         }
 
-        // Общие напоминания (быстрая кнопка)
         SectionCard {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
@@ -206,7 +204,6 @@ fun RemindersScreen(
             }
         }
 
-        // Активные напоминания
         SectionCard {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
@@ -235,7 +232,6 @@ fun RemindersScreen(
             }
         }
 
-        // История приёмов
         if (intakes.isNotEmpty()) {
             SectionCard {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -932,7 +928,7 @@ private fun RequestNotificationPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-    ) { /* tolerate denial */ }
+    ) {  }
     LaunchedEffect(Unit) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
 }
 

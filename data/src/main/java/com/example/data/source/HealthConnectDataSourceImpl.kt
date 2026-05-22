@@ -15,11 +15,6 @@ class HealthConnectDataSourceImpl(
     private val context: Context,
 ) : HealthConnectDataSource {
 
-    /**
-     * Создаём клиента лениво и безопасно: `HealthConnectClient.getOrCreate` бросает
-     * `IllegalStateException`, если HC не установлен, — заворачиваем в Result, чтобы
-     * вызывающий код мог корректно деградировать вместо падения приложения.
-     */
     private val client: HealthConnectClient? by lazy {
         runCatching { HealthConnectClient.getOrCreate(context) }.getOrNull()
     }

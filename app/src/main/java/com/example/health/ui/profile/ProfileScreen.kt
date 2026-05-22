@@ -119,7 +119,6 @@ fun ProfileScreen(
     ) {
         ScreenTitle("Профиль")
 
-        // Аватар + краткие данные
         SectionCard {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Avatar(name = profile?.name.orEmpty())
@@ -159,7 +158,6 @@ fun ProfileScreen(
             }
         }
 
-        // Медкарта (SOS)
         SectionCard {
             LabelXsText("Медкарта (SOS)")
             Spacer(Modifier.size(8.dp))
@@ -180,7 +178,6 @@ fun ProfileScreen(
             ProfileTextRow("Хронические", profile?.chronicConditions?.ifBlank { "—" } ?: "—")
         }
 
-        // Сервисы
         SectionCard {
             LabelXsText("Сервисы")
             Spacer(Modifier.size(8.dp))

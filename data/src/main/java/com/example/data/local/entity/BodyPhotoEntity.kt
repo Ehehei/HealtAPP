@@ -8,7 +8,7 @@ data class BodyPhotoEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val userId: String,
     val filePath: String,
-    val type: String, // BODY / ANALYSIS
+    val type: String,
     val note: String?,
     val dateEpochMillis: Long,
 )

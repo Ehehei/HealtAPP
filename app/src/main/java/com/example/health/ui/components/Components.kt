@@ -49,7 +49,6 @@ import com.example.health.ui.theme.TextDisabled
 import com.example.health.ui.theme.TextPrimary
 import com.example.health.ui.theme.TextSecondary
 
-// --- Карточка с мягкой тенью 0 2 12 rgba(15,20,25,0.06) ---
 @Composable
 fun SectionCard(
     modifier: Modifier = Modifier,
@@ -82,7 +81,6 @@ fun SectionCard(
     }
 }
 
-// --- Большой заголовок экрана ---
 @Composable
 fun ScreenTitle(text: String, modifier: Modifier = Modifier) {
     Text(
@@ -93,7 +91,6 @@ fun ScreenTitle(text: String, modifier: Modifier = Modifier) {
     )
 }
 
-// --- Uppercase label с letter-spacing 0.04em ---
 @Composable
 fun LabelXsText(
     text: String,
@@ -108,7 +105,6 @@ fun LabelXsText(
     )
 }
 
-// --- Цветная точка-акцент для строк метрик ---
 @Composable
 fun AccentDot(color: Color, size: Int = 8, modifier: Modifier = Modifier) {
     Box(
@@ -118,7 +114,6 @@ fun AccentDot(color: Color, size: Int = 8, modifier: Modifier = Modifier) {
     )
 }
 
-// --- Lock-бейдж «Все данные только на этом устройстве» (всегда видим) ---
 @Composable
 fun LockBadge(
     text: String = "Все данные только на этом устройстве",
@@ -143,7 +138,6 @@ fun LockBadge(
     }
 }
 
-// --- Мини-карточка метрики 2×2 на главной (давление/вес/пульс/самочувствие) ---
 @Composable
 fun MetricMiniCard(
     accent: Color,
@@ -173,12 +167,11 @@ fun MetricMiniCard(
     }
 }
 
-// --- 7-дневный мини-бар (вертикальные столбики) ---
 @Composable
 fun MiniWeekBars(
-    heights: List<Float>,                // 0..1, 7 значений
+    heights: List<Float>,
     color: Color = BrandGreen,
-    activeIndex: Int = 6,                // сегодня — последний
+    activeIndex: Int = 6,
     height: androidx.compose.ui.unit.Dp = 32.dp,
     modifier: Modifier = Modifier,
 ) {
@@ -202,7 +195,6 @@ fun MiniWeekBars(
     }
 }
 
-// --- Кольцевой прогресс для шагов (SVG-стиль через Canvas) ---
 @Composable
 fun RingProgress(
     percent: Float,
@@ -247,7 +239,6 @@ fun RingProgress(
     }
 }
 
-// --- «Chip-таб» — используется в Метриках (Шаги/Вес/Давление), в Фото (Тело/Анализы), в PDF (период) ---
 @Composable
 fun ChipTab(
     text: String,
@@ -271,7 +262,6 @@ fun ChipTab(
     }
 }
 
-// --- Тёмный (NeutralDark) chip-таб — для PDF «30 дней» и Фото «Фото тела» ---
 @Composable
 fun DarkChipTab(text: String, selected: Boolean, onClick: () -> Unit) {
     ChipTab(
@@ -283,7 +273,6 @@ fun DarkChipTab(text: String, selected: Boolean, onClick: () -> Unit) {
     )
 }
 
-// --- Pill-чип статуса (для inline-чипов в Профиле и медкарте SOS) ---
 @Composable
 fun StatusPill(
     text: String,
@@ -301,7 +290,6 @@ fun StatusPill(
     }
 }
 
-// --- Тонкий divider ---
 @Composable
 fun Divider(modifier: Modifier = Modifier) {
     Box(
@@ -312,7 +300,6 @@ fun Divider(modifier: Modifier = Modifier) {
     )
 }
 
-// --- Универсальный пустой filler в карточке (для placeholder-плашек) ---
 @Composable
 fun BoxScope.PlaceholderHint(text: String) {
     Text(text, color = TextDisabled, fontSize = 12.sp, modifier = Modifier.align(Alignment.Center))

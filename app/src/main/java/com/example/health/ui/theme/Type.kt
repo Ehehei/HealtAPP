@@ -25,16 +25,14 @@ val InterFamily = FontFamily(
     Font(googleFont = interFont, fontProvider = googleFontsProvider, weight = FontWeight.Bold, style = FontStyle.Normal),
 )
 
-// Mono — для давления 120/80. Inter не имеет mono-варианта; используем системный monospace.
 val MonoFamily: FontFamily = FontFamily.Monospace
 
-// Дополнительные стили вне Material Typography — для uppercase-меток с letter-spacing.
 val LabelXs: TextStyle = TextStyle(
     fontFamily = InterFamily,
     fontWeight = FontWeight.Medium,
     fontSize = 11.sp,
     lineHeight = 14.sp,
-    letterSpacing = 0.6.sp, // ~0.04em для 11sp
+    letterSpacing = 0.6.sp,
 )
 
 val DisplayL: TextStyle = TextStyle(
@@ -62,7 +60,7 @@ val PressureMono: TextStyle = TextStyle(
 )
 
 val Typography: Typography = Typography(
-    // Заголовки
+
     headlineLarge = TextStyle(
         fontFamily = InterFamily,
         fontWeight = FontWeight.Bold,
