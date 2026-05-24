@@ -38,10 +38,11 @@ class BodyPhotoDiffAnalyzer(
         after: BodyPhoto,
         beforeWeight: WeightRecord? = null,
         afterWeight: WeightRecord? = null,
+        enforceMinInterval: Boolean = true,
     ): Verdict {
         val days = ChronoUnit.DAYS.between(before.date, after.date).toInt()
 
-        if (days < minIntervalDays) {
+        if (enforceMinInterval && days < minIntervalDays) {
             return Verdict(
                 ProgressVerdict.TOO_EARLY,
                 visualChange = 0f,
@@ -71,7 +72,8 @@ class BodyPhotoDiffAnalyzer(
                 "Видимых изменений пока нет — это нормально. Не сравнивай себя ежедневно, " +
                     "следи за трендом за месяц."
             ProgressVerdict.SUBTLE_PROGRESS ->
-                "Лёгкий, но реальный сдвиг за $days дн. Не торопи результат — стабильность важнее скорости."
+                "Лёгкий, но реальный сдвиг" + (if (days > 0) " за $days дн" else "") +
+                    ". Не торопи результат — стабильность важнее скорости."
             ProgressVerdict.CLEAR_PROGRESS ->
                 "Чёткий прогресс за $days дн" +
                     (weightDelta?.let { " · вес ${formatDelta(it)} кг" } ?: "") + ". Продолжай."

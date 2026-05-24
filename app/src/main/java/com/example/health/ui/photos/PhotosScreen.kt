@@ -2,6 +2,11 @@ package com.example.health.ui.photos
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,21 +28,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.automirrored.filled.CompareArrows
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.data.analysis.BodyPhotoDiffAnalyzer
 import com.example.domain.model.BodyPhoto
 import com.example.domain.model.PhotoType
 import com.example.health.ui.components.ChipTab
@@ -69,6 +78,11 @@ fun PhotosScreen(modifier: Modifier = Modifier, vm: PhotosViewModel = koinViewMo
     val analyses by vm.analysisPhotos.collectAsState()
     val pairs by vm.pairs.collectAsState()
     val verdict by vm.verdict.collectAsState()
+    val showVerdictDialog by vm.showVerdictDialog.collectAsState()
+
+    if (showVerdictDialog) {
+        ProgressVerdictDialog(verdict = verdict, onDismiss = { vm.dismissVerdict() })
+    }
 
     val picker = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent(),
@@ -134,7 +148,7 @@ fun PhotosScreen(modifier: Modifier = Modifier, vm: PhotosViewModel = koinViewMo
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .clickable { vm.refreshPairs() },
+                        .clickable { vm.compareProgress() },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                 ) {
@@ -280,4 +294,66 @@ private fun verdictLabel(name: String): String = when (name) {
     "CLEAR_PROGRESS" -> "Чёткий прогресс"
     "REGRESSION" -> "Откат"
     else -> "—"
+}
+
+private fun verdictEmoji(name: String): String = when (name) {
+    "TOO_EARLY" -> "⏳"
+    "NOISE" -> "🌊"
+    "SUBTLE_PROGRESS" -> "🌱"
+    "CLEAR_PROGRESS" -> "🔥"
+    "REGRESSION" -> "🤍"
+    else -> "🙂"
+}
+
+@Composable
+private fun ProgressVerdictDialog(
+    verdict: BodyPhotoDiffAnalyzer.Verdict?,
+    onDismiss: () -> Unit,
+) {
+    // Мигающий смайлик: бесконечная анимация прозрачности.
+    val transition = rememberInfiniteTransition(label = "blink")
+    val emojiAlpha by transition.animateFloat(
+        initialValue = 1f,
+        targetValue = 0.15f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 650),
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "emojiAlpha",
+    )
+
+    val emoji = verdict?.let { verdictEmoji(it.verdict.name) } ?: "📷"
+    val title = verdict?.let { verdictLabel(it.verdict.name) } ?: "Недостаточно фото"
+    val message = verdict?.message
+        ?: "Добавь хотя бы два снимка, чтобы сравнить прогресс."
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = {
+            Text(
+                text = emoji,
+                fontSize = 48.sp,
+                modifier = Modifier.alpha(emojiAlpha),
+            )
+        },
+        title = {
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold,
+                color = TextPrimary,
+            )
+        },
+        text = {
+            Text(
+                text = message,
+                color = TextSecondary,
+                fontSize = 14.sp,
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Понятно")
+            }
+        },
+    )
 }

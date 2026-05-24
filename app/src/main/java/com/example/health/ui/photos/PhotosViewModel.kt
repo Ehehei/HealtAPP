@@ -47,7 +47,12 @@ class PhotosViewModel(
     private val _verdict = MutableStateFlow<BodyPhotoDiffAnalyzer.Verdict?>(null)
     val verdict: StateFlow<BodyPhotoDiffAnalyzer.Verdict?> = _verdict.asStateFlow()
 
+    private val _showVerdictDialog = MutableStateFlow(false)
+    val showVerdictDialog: StateFlow<Boolean> = _showVerdictDialog.asStateFlow()
+
     fun setType(type: PhotoType) { _type.value = type }
+
+    fun dismissVerdict() { _showVerdictDialog.value = false }
 
     fun bytesOf(path: String): ByteArray? = storage.readBytes(path)
 
@@ -71,13 +76,50 @@ class PhotosViewModel(
         }
     }
 
+    /** Тихое обновление пар (после добавления фото) — без всплывающего окна. */
     fun refreshPairs() {
         viewModelScope.launch {
             _pairs.value = getPairs(Session.USER_ID, PhotoType.BODY)
-
             _pairs.value.lastOrNull()?.let { pair ->
                 _verdict.value = analyzer.analyze(pair.before, pair.after)
             }
+        }
+    }
+
+    /**
+     * Запуск сравнения по кнопке «Сравнить прогресс».
+     * Всегда показывает окно с вердиктом.
+     * Если «честной» пары (интервал ≥2 недель) нет, но фото хотя бы два — алгоритм
+     * прогоняется на самом старом и самом новом снимке без блокировки по сроку,
+     * чтобы результат был виден (демо-режим для дипломного скриншота).
+     */
+    fun compareProgress() {
+        viewModelScope.launch {
+            val realPairs = getPairs(Session.USER_ID, PhotoType.BODY)
+            _pairs.value = realPairs
+
+            val verdict = when {
+                realPairs.isNotEmpty() -> {
+                    val pair = realPairs.last()
+                    analyzer.analyze(pair.before, pair.after)
+                }
+                else -> {
+                    val photos = bodyPhotos.value.sortedBy { it.date }
+                    if (photos.size >= 2) {
+                        val before = photos.first()
+                        val after = photos.last()
+                        _pairs.value = listOf(
+                            PhotoComparisonPair(before, after, daysBetween = 0)
+                        )
+                        analyzer.analyze(before, after, enforceMinInterval = false)
+                    } else {
+                        null
+                    }
+                }
+            }
+
+            _verdict.value = verdict
+            _showVerdictDialog.value = true
         }
     }
 }
