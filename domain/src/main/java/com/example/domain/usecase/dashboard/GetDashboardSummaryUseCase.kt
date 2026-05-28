@@ -20,7 +20,10 @@ class GetDashboardSummaryUseCase(
     private val bloodPressureRepository: BloodPressureRepository
 ) {
     suspend operator fun invoke(userId: String): DashboardSummary? {
-        val profile = userProfileRepository.getById(userId) ?: return null
+        // Профиль может быть ещё не заполнен — это не должно обнулять весь дашборд.
+        // Метрики (вес, давление, самочувствие) показываем независимо от профиля;
+        // от профиля зависят только имя, ИМТ и изменение веса «с начала».
+        val profile = userProfileRepository.getById(userId)
         val today = LocalDate.now()
 
         val todaySteps = stepRepository.getByDateRange(userId, today, today)
@@ -29,9 +32,11 @@ class GetDashboardSummaryUseCase(
 
         val weights = weightRepository.getByUserId(userId)
         val latestWeight = weights.maxByOrNull { it.date }
-        val weightChange = latestWeight?.let { it.weightKg - profile.initialWeightKg }
+        val weightChange = if (latestWeight != null && profile != null) {
+            latestWeight.weightKg - profile.initialWeightKg
+        } else null
 
-        val heightM = profile.height / 100f
+        val heightM = (profile?.height ?: 0f) / 100f
         val bmi = if (latestWeight != null && heightM > 0f) {
             latestWeight.weightKg / (heightM * heightM)
         } else null
@@ -56,7 +61,7 @@ class GetDashboardSummaryUseCase(
         }
 
         return DashboardSummary(
-            userName = profile.name,
+            userName = profile?.name.orEmpty(),
             todaySteps = todaySteps,
             stepGoalPercent = (todaySteps.toFloat() / stepGoal).coerceAtMost(1f),
             latestWeight = latestWeight?.weightKg,

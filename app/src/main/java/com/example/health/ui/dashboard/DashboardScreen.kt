@@ -24,6 +24,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -75,6 +76,11 @@ fun DashboardScreen(
     val bars by vm.weekBars.collectAsState()
     val pendingScreenings by vm.pendingScreenings.collectAsState()
     val todayReminders by vm.todayReminders.collectAsState()
+
+    // ViewModel живёт в scope Activity и переживает переключение вкладок, поэтому
+    // init { refresh() } срабатывает лишь однажды. При каждом возврате на «Главную»
+    // composable пересоздаётся — перечитываем свежие метрики (шаги, вес, давление, самочувствие).
+    LaunchedEffect(Unit) { vm.refresh() }
 
     val today = LocalDate.now()
     val greeting = greetingFor(LocalTime.now().hour)
